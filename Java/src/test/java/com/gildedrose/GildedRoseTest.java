@@ -126,5 +126,21 @@ public class GildedRoseTest {
     	app.updateQuality();
     	assertEquals(0, item.quality);
     }
+    
+    @Test
+    public void conjuredItemShouldDecrementTwoTimes() {
+    	Item item = new Item("Conjured Mana Cake", 10, 10);
+    	GildedRose app = new GildedRose(new Item[]{item});
+    	app.updateQuality();
+    	assertEquals(8, item.quality);
+    }
+    
+    @Test
+    public void conjuredItemShouldDecrementFourTimesWhenSellInHasPassed() {
+    	Item item = new Item("Conjured Mana Cake", 0, 10);
+    	GildedRose app = new GildedRose(new Item[]{item});
+    	app.updateQuality();
+    	assertEquals(6, item.quality);
+    }
 
 }
