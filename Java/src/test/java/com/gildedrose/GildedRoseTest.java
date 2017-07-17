@@ -7,7 +7,7 @@ import org.junit.Test;
 public class GildedRoseTest {
 
     @Test
-    public void qualityShouldNotBeNegative() {
+    public void standardItemQualityShouldNotBeNegative() {
     	Item item = new Item("+5 Dexterity Vest", 10, 0);
     	GildedRose app = new GildedRose(new Item[]{item});
     	app.updateQuality();
@@ -88,6 +88,14 @@ public class GildedRoseTest {
     }
     
     @Test
+    public void backstagePassesQualityShouldNotBeNegative() {
+    	Item item = new Item("Backstage passes to a TAFKAL80ETC concert", -10, 0);
+    	GildedRose app = new GildedRose(new Item[]{item});
+    	app.updateQuality();
+    	assertEquals(0, item.quality);
+    }
+    
+    @Test
     public void backstagePassesShouldDecrenentSellIn() {
     	Item item = new Item("Backstage passes to a TAFKAL80ETC concert", 20, 0);
     	GildedRose app = new GildedRose(new Item[]{item});
@@ -122,6 +130,14 @@ public class GildedRoseTest {
     @Test
     public void backstagePassesShouldDropQualityToZeroWhenSellInHasPassed() {
     	Item item = new Item("Backstage passes to a TAFKAL80ETC concert", 0, 10);
+    	GildedRose app = new GildedRose(new Item[]{item});
+    	app.updateQuality();
+    	assertEquals(0, item.quality);
+    }
+    
+    @Test
+    public void conjuredItemQualityShouldNotBeNegative() {
+    	Item item = new Item("Conjured Mana Cake", -10, 0);
     	GildedRose app = new GildedRose(new Item[]{item});
     	app.updateQuality();
     	assertEquals(0, item.quality);
