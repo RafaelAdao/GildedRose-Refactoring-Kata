@@ -2,161 +2,87 @@ package com.gildedrose;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Random;
 import org.junit.Test;
 
 public class GildedRoseTest {
 
-    @Test
-    public void standardItemQualityShouldNotBeNegative() {
-    	Item item = new Item("+5 Dexterity Vest", 10, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(0, item.quality);
-    }
-    
-    @Test
-    public void sellInShouldDecrementBelowZero() {
-    	Item item = new Item("+5 Dexterity Vest", 0, 2);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(-1, item.sellIn);
-    }
-    
-    @Test
-    public void standardItemShouldDecrementSellIn() {
-    	Item item = new Item("+5 Dexterity Vest", 10, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(9, item.sellIn);
-    }
-    
-    @Test
-    public void standardItemShouldDecrementQuality() {
-    	Item item = new Item("+5 Dexterity Vest", 10, 1);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(0, item.quality);
-    }
-    
-    @Test
-    public void standardItemShouldDecrementQualityTwiceWhenSellInHasPassed() {
-    	Item item = new Item("+5 Dexterity Vest", -1, 10);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(8, item.quality);
-    }
-    
-    @Test
-    public void agedBrieShouldDecrementSellIn() {
-    	Item item = new Item("Aged Brie", 10, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(9, item.sellIn);
-    }
-    
-    @Test
-    public void agedBrieItemShouldIncrementQuality() {
-    	Item item = new Item("Aged Brie", 2, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(1, item.quality);
-    }
-    
-    @Test
-    public void agedBrieItemShouldNotIncrementQualityOverFifty() {
-    	Item item = new Item("Aged Brie", 2, 50);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(50, item.quality);
-    }
-    
-    @Test
-    public void agedBrieItemShouldIncrementQualityByTwiceWhenSellInHasPassed() {
-    	Item item = new Item("Aged Brie", 0, 10);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(12, item.quality);
-    }
+	public static final int SEMENTE_FIXA = 1;
+	public static final int NUMERO_DE_ITENS = 5000;
+	public static final Path ARQUIVO_MASTER = Paths.get("master.txt");
+	public static final Path ARQUIVO_TESTE_ATUAL = Paths.get("test-run.txt");
 
-    @Test
-    public void legendaryItemShouldBeImmutable() {
-    	Item item = new Item("Sulfuras, Hand of Ragnaros", 10, 20);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(10, item.sellIn);
-    	assertEquals(20, item.quality);
-    }
-    
-    @Test
-    public void backstagePassesQualityShouldNotBeNegative() {
-    	Item item = new Item("Backstage passes to a TAFKAL80ETC concert", -10, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(0, item.quality);
-    }
-    
-    @Test
-    public void backstagePassesShouldDecrenentSellIn() {
-    	Item item = new Item("Backstage passes to a TAFKAL80ETC concert", 20, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(19, item.sellIn);
-    }
-    
-    @Test
-    public void backstagePassesShouldIncrementQuality() {
-    	Item item = new Item("Backstage passes to a TAFKAL80ETC concert", 20, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(1, item.quality);
-    }
-    
-    @Test
-    public void backstagePassesShouldIncrementQualityByTwoWhenSellInIsBelowTen() {
-    	Item item = new Item("Backstage passes to a TAFKAL80ETC concert", 10, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(2, item.quality);
-    }
-    
-    @Test
-    public void backstagePassesShouldIncrementQualityByThreeWhenSellInIsBelowFive() {
-    	Item item = new Item("Backstage passes to a TAFKAL80ETC concert", 5, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(3, item.quality);
-    }
-    
-    @Test
-    public void backstagePassesShouldDropQualityToZeroWhenSellInHasPassed() {
-    	Item item = new Item("Backstage passes to a TAFKAL80ETC concert", 0, 10);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(0, item.quality);
-    }
-    
-    @Test
-    public void conjuredItemQualityShouldNotBeNegative() {
-    	Item item = new Item("Conjured Mana Cake", -10, 0);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(0, item.quality);
-    }
-    
-    @Test
-    public void conjuredItemShouldDecrementTwoTimes() {
-    	Item item = new Item("Conjured Mana Cake", 10, 10);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(8, item.quality);
-    }
-    
-    @Test
-    public void conjuredItemShouldDecrementFourTimesWhenSellInHasPassed() {
-    	Item item = new Item("Conjured Mana Cake", 0, 10);
-    	GildedRose app = new GildedRose(new Item[]{item});
-    	app.updateQuality();
-    	assertEquals(6, item.quality);
-    }
+	public static final int MAX_SELLIN = 10;
+	public static final int MIN_SELLIN = -10;
+	public static final int MAX_QUALITY = 50;
+	public static final int MIN_QUALITY = 0;
 
+	public static final String[] NOME_DOS_ITENS = { "Item Qualquer", "Aged Brie",
+			"Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros" };
+
+	private Random random = new Random(SEMENTE_FIXA);
+	
+	public static void main(String[] args) throws IOException {
+		GildedRoseTest gr = new GildedRoseTest();
+		gr.gerarAmostragemDeTeste(ARQUIVO_MASTER, NUMERO_DE_ITENS);
+	}
+	
+	@Test
+	public void comparaTesteAtualComMaster() throws IOException {
+		gerarAmostragemDeTeste(ARQUIVO_TESTE_ATUAL, NUMERO_DE_ITENS);
+		String arquivoDoTesteAtual = lerArquivo(ARQUIVO_TESTE_ATUAL);
+		String arquivoDoMaster = lerArquivo(ARQUIVO_MASTER);
+		assertEquals(arquivoDoTesteAtual, arquivoDoMaster);
+	}
+
+private void gerarAmostragemDeTeste(Path caminhoDoArquivo, int numeroDeItens) throws IOException {
+	Item[] itensAleatorios = gerarItensAleatorio(numeroDeItens);
+	GildedRose gildedRoseApp = new GildedRose(itensAleatorios);
+	gildedRoseApp.updateQuality();
+	try (BufferedWriter arquivoParaEscrever = Files.newBufferedWriter(caminhoDoArquivo)) {
+		for (Item item : itensAleatorios) {
+			arquivoParaEscrever.write(item.toString() + "\n");
+		}
+	}
+}
+
+private String lerArquivo(Path caminhoDoArquivo) throws UnsupportedEncodingException, IOException {
+	return new String(Files.readAllBytes(caminhoDoArquivo), "UTF-8");
+}
+
+private Item[] gerarItensAleatorio(int numeroDeItens) {
+	Item[] items = new Item[numeroDeItens];
+
+	for (int i = 0; i < numeroDeItens; i++) {
+		items[i] = getItemAleatorio();
+	}
+
+	return items;
+}
+
+private Item getItemAleatorio() {
+	return new Item(getNameAleatorio(), getSellInAleatorio(), getQualityAleatorio());
+}
+
+private String getNameAleatorio() {
+	return NOME_DOS_ITENS[random.nextInt(NOME_DOS_ITENS.length)];
+}
+
+private int getSellInAleatorio() {
+	return gerarNumeroAleatorioEntre(MIN_SELLIN, MAX_SELLIN);
+}
+
+private int getQualityAleatorio() {
+	return gerarNumeroAleatorioEntre(MIN_QUALITY, MAX_QUALITY);
+}
+
+private int gerarNumeroAleatorioEntre(int minimo, int maximo) {
+	return random.nextInt(maximo - minimo) + minimo;
+}
 }
