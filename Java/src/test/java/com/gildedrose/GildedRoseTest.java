@@ -27,12 +27,12 @@ public class GildedRoseTest {
 			"Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros" };
 
 	private Random random = new Random(SEMENTE_FIXA);
-	
+
 	public static void main(String[] args) throws IOException {
 		GildedRoseTest gr = new GildedRoseTest();
 		gr.gerarAmostragemDeTeste(ARQUIVO_MASTER, NUMERO_DE_ITENS);
 	}
-	
+
 	@Test
 	public void comparaTesteAtualComMaster() throws IOException {
 		gerarAmostragemDeTeste(ARQUIVO_TESTE_ATUAL, NUMERO_DE_ITENS);
@@ -41,48 +41,48 @@ public class GildedRoseTest {
 		assertEquals(arquivoDoTesteAtual, arquivoDoMaster);
 	}
 
-private void gerarAmostragemDeTeste(Path caminhoDoArquivo, int numeroDeItens) throws IOException {
-	Item[] itensAleatorios = gerarItensAleatorio(numeroDeItens);
-	GildedRose gildedRoseApp = new GildedRose(itensAleatorios);
-	gildedRoseApp.updateQuality();
-	try (BufferedWriter arquivoParaEscrever = Files.newBufferedWriter(caminhoDoArquivo)) {
-		for (Item item : itensAleatorios) {
-			arquivoParaEscrever.write(item.toString() + "\n");
+	private void gerarAmostragemDeTeste(Path caminhoDoArquivo, int numeroDeItens) throws IOException {
+		Item[] itensAleatorios = gerarItensAleatorio(numeroDeItens);
+		GildedRose gildedRoseApp = new GildedRose(itensAleatorios);
+		gildedRoseApp.updateQuality();
+		try (BufferedWriter arquivoParaEscrever = Files.newBufferedWriter(caminhoDoArquivo)) {
+			for (Item item : itensAleatorios) {
+				arquivoParaEscrever.write(item.toString() + "\n");
+			}
 		}
 	}
-}
 
-private String lerArquivo(Path caminhoDoArquivo) throws UnsupportedEncodingException, IOException {
-	return new String(Files.readAllBytes(caminhoDoArquivo), "UTF-8");
-}
-
-private Item[] gerarItensAleatorio(int numeroDeItens) {
-	Item[] items = new Item[numeroDeItens];
-
-	for (int i = 0; i < numeroDeItens; i++) {
-		items[i] = getItemAleatorio();
+	private String lerArquivo(Path caminhoDoArquivo) throws UnsupportedEncodingException, IOException {
+		return new String(Files.readAllBytes(caminhoDoArquivo), "UTF-8");
 	}
 
-	return items;
-}
+	private Item[] gerarItensAleatorio(int numeroDeItens) {
+		Item[] items = new Item[numeroDeItens];
 
-private Item getItemAleatorio() {
-	return new Item(getNameAleatorio(), getSellInAleatorio(), getQualityAleatorio());
-}
+		for (int i = 0; i < numeroDeItens; i++) {
+			items[i] = getItemAleatorio();
+		}
 
-private String getNameAleatorio() {
-	return NOME_DOS_ITENS[random.nextInt(NOME_DOS_ITENS.length)];
-}
+		return items;
+	}
 
-private int getSellInAleatorio() {
-	return gerarNumeroAleatorioEntre(MIN_SELLIN, MAX_SELLIN);
-}
+	private Item getItemAleatorio() {
+		return new Item(getNameAleatorio(), getSellInAleatorio(), getQualityAleatorio());
+	}
 
-private int getQualityAleatorio() {
-	return gerarNumeroAleatorioEntre(MIN_QUALITY, MAX_QUALITY);
-}
+	private String getNameAleatorio() {
+		return NOME_DOS_ITENS[random.nextInt(NOME_DOS_ITENS.length)];
+	}
 
-private int gerarNumeroAleatorioEntre(int minimo, int maximo) {
-	return random.nextInt(maximo - minimo) + minimo;
-}
+	private int getSellInAleatorio() {
+		return gerarNumeroAleatorioEntre(MIN_SELLIN, MAX_SELLIN);
+	}
+
+	private int getQualityAleatorio() {
+		return gerarNumeroAleatorioEntre(MIN_QUALITY, MAX_QUALITY);
+	}
+
+	private int gerarNumeroAleatorioEntre(int minimo, int maximo) {
+		return random.nextInt(maximo - minimo) + minimo;
+	}
 }
